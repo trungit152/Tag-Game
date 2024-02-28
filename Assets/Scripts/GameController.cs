@@ -1,47 +1,33 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public List<bool> tags;
-    public List<GameObject> players;
     public static GameController Instance;
-    private float time = 0f;
-    private bool setable = true;
-    private void Awake()
-    {
-        if(Instance == null)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
+    [SerializeField] private DataSO data;
+    System.Random rd;
     private void Start()
     {
-        System.Random rd = new System.Random();
+        rd = new System.Random();
+    }
+    public void ButtonStart()
+    {
 
-    }
-    private void Update()
-    {
-        SetTag();
-    }
-    private void SetTag()
-    {
-        time += Time.deltaTime;
-        if (time > 2f && setable)
+        data.randNumber = rd.Next(0,2);
+        for (int i = 0; i < data.players.Count; i++)
         {
-            GameController.Instance.tags[RandomPlayer()] = true;
-            setable = false;
+            Destroy(data.players[i]);
         }
+        data.players.Clear();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-    private int RandomPlayer()
+    public void Test()
     {
-        System.Random rd = new System.Random();
-        return rd.Next(1, 2);
+        int n = rd.Next(0, 2);
+        Debug.Log(n.ToString());
+    }
+    public void Test2()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }
