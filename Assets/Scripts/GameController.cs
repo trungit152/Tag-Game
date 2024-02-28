@@ -1,14 +1,30 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
     public static GameController Instance;
     [SerializeField] private DataSO data;
+    [SerializeField] private Text timeText;
+    public bool count = false;
+    private float countTime = 30f;
     System.Random rd;
     private void Start()
     {
         rd = new System.Random();
+    }
+    private void Update()
+    {
+        timeText.text = System.Math.Round(countTime, 0).ToString();
+        if (count)
+        {
+            countTime -= Time.deltaTime;
+        }
+        if (countTime < 0f)
+        {
+            count = false;
+        }
     }
     public void ButtonStart()
     {
@@ -19,7 +35,7 @@ public class GameController : MonoBehaviour
             Destroy(data.players[i]);
         }
         data.players.Clear();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("Loading");
     }
     public void Test()
     {

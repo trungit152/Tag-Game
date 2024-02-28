@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player_TagController : MonoBehaviour
 {
@@ -11,35 +12,26 @@ public class Player_TagController : MonoBehaviour
     private float coolDown = 1f;
     public static Player_TagController Instance;
     [SerializeField] private DataSO data;
-    private float time = 0f;
-    private bool setable = true;
-    System.Random rd;
     private void Awake()
     {
         Instance = this;
     }
     private void Start()
     {
-        rd = new System.Random();
         data.players.Add(this.gameObject);
+    }
+    public void PlayClick()
+    {
+        if (this.gameObject == data.players[data.randNumber])
+        {
+            this.isTagged = true;
+            GameController.Instance.count = true;
+        }
     }
     void Update()
     {
         CoolDown();
         playerTag.SetActive(isTagged);
-        SetTag();
-    }
-    private void SetTag()
-    {
-        time += Time.deltaTime;
-        if (time > 2f && setable)
-        {
-            if (this.gameObject == data.players[data.randNumber])
-            {
-                this.isTagged = true;
-                setable = false;
-            }
-        }
     }
     private void CoolDown()
     {
