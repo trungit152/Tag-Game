@@ -1607,6 +1607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   createInput: {fileID: 1184580562}
   joinInput: {fileID: 1882294958}
+  data: {fileID: 11400000, guid: 8d499463982795c48a03a2537d5fdbb6, type: 2}
 --- !u!4 &1934286044
 Transform:
   m_ObjectHideFlags: 0

@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
+using Unity.VisualScripting;
 public class Player_Movement : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
@@ -10,9 +11,11 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     private float horizontal;
     private Rigidbody2D rb;
+    PhotonView view;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        view = rb.GetComponent<PhotonView>();
     }
 
     void Update()
@@ -21,21 +24,30 @@ public class Player_Movement : MonoBehaviour
         JumpPressed();
         MovePressed();
     }
+ 
     private void JumpPressed()
     {
-        if (Input.GetButtonDown("Jump") && IsGround())
+        if(view.IsMine)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            if (Input.GetButtonDown("Jump") && IsGround())
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            }
+            if (Input.GetButtonDown("Jump") && rb.velocity.y > 0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            }
         }
-        if (Input.GetButtonDown("Jump") && rb.velocity.y > 0f)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-        }
+
     }
     private void MovePressed()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2 (horizontal * speed, rb.velocity.y);
+        if (view.IsMine)
+        {
+            horizontal = Input.GetAxisRaw("Horizontal");
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        }
+
     }
     private bool IsGround()
     {

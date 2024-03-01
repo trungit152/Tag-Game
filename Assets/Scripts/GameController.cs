@@ -10,6 +10,15 @@ public class GameController : MonoBehaviour
     public bool count = false;
     private float countTime = 30f;
     System.Random rd;
+    public bool GCfirstTag = false;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Instance = this;
+        }
+    }
     private void Start()
     {
         rd = new System.Random();
@@ -17,6 +26,18 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         timeText.text = System.Math.Round(countTime, 0).ToString();
+        CounterTime();
+    }
+    public void PlayClick()
+    {
+        ChangeColor.Instance.DestroyMe();
+        Debug.Log("doneClick");
+        count = true;
+        GCfirstTag = true;
+        Player_TagController.Instance.SetTag();
+    }
+    private void CounterTime()
+    {
         if (count)
         {
             countTime -= Time.deltaTime;
@@ -26,24 +47,8 @@ public class GameController : MonoBehaviour
             count = false;
         }
     }
-    public void ButtonStart()
-    {
-
-        data.randNumber = rd.Next(0,2);
-        for (int i = 0; i < data.players.Count; i++)
-        {
-            Destroy(data.players[i]);
-        }
-        data.players.Clear();
-        SceneManager.LoadScene("Loading");
-    }
-    public void Test()
-    {
-        int n = rd.Next(0, 2);
-        Debug.Log(n.ToString());
-    }
     public void Test2()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        SceneManager.LoadScene("Start");
     }
 }

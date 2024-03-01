@@ -8,30 +8,40 @@ public class Player_TagController : MonoBehaviour
 {
     [SerializeField] private GameObject playerTag;
     private bool isTagged = false;
-    private bool canTag = true;
+    private bool canTag = false;
     private float coolDown = 1f;
     public static Player_TagController Instance;
     [SerializeField] private DataSO data;
+    private Renderer rend;
+    public bool firstTag = true;
+    System.Random rd;
     private void Awake()
     {
         Instance = this;
     }
     private void Start()
     {
+        rend =GetComponent<Renderer>();
+        rd = new System.Random();
         data.players.Add(this.gameObject);
     }
-    public void PlayClick()
-    {
-        if (this.gameObject == data.players[data.randNumber])
-        {
-            this.isTagged = true;
-            GameController.Instance.count = true;
-        }
-    }
+
     void Update()
     {
         CoolDown();
         playerTag.SetActive(isTagged);
+    }
+    public void SetTag()
+    {
+        {
+            if (gameObject == data.players[1])
+            {
+                this.isTagged = true;
+                Debug.Log("done");
+            }
+            canTag = true;
+            firstTag = false;
+        }
     }
     private void CoolDown()
     {
@@ -50,9 +60,16 @@ public class Player_TagController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && canTag)
         {
-            Debug.Log("ok1");
             isTagged = !isTagged;
             coolDown = 1f;
+        }
+    }
+    //E01C1C
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Color"))
+        {
+            rend.material.color = Random.ColorHSV();
         }
     }
     public void ButtonStart1()
